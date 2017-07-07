@@ -39,8 +39,8 @@ function RepoGrid (props) {
                   alt={'Avarat for ' + repo.owner.login}
                   className='avatar' />
               </li>
-              <li><a href={repo.html_url}>{repo.name}</a></li>
-              <li>@{repo.owner.login}</li>
+              <li><a href={repo.html_url} target='_blank'>{repo.name}</a></li>
+              <li><a href={repo.owner.html_url} target='_blank'>@{repo.owner.login}</a></li>
               <li>{repo.stargazers_count}</li>
             </ul>
           </li>
@@ -86,7 +86,7 @@ class Popular extends Component {
           selectedLanguage={this.state.selectedLanguage}
           onSelect={this.updateLanguage} />
           {!this.state.repos
-            ? <p>Loading</p>
+            ? <p className='home-container'>Loading</p>
             : <RepoGrid repos={this.state.repos} />
           }
       </div>
