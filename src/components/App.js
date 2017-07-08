@@ -1,10 +1,13 @@
 import React from 'react';
 import Popular from './Popular';
-import { Switch, BrowserRouter as Router, Route} from 'react-router-dom';
+import { Switch, BrowserRouter as Router, Route } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
 import Battle from './Battle';
 import Results from './Results';
+import axios from 'axios';
+
+window.axios = axios;
 
 function App() {
   return (
