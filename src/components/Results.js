@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import * as api from '../utils/api';
 import { PlayerPreview } from './PlayerPreview';
+import Loading from './Loading';
 
 function Profile (props) {
   var info = props.info;
@@ -83,7 +84,7 @@ class Results extends Component {
     var loading = this.state.loading;
 
     if (loading) {
-      return <p>Loading</p>
+      return <Loading text='Please Wait' />
     }
 
     if (error) {
