@@ -1,103 +1,50 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import * as api from '../utils/api';
-import { PlayerPreview } from './PlayerPreview';
 import Loading from './Loading';
+import { Player } from './Player';
 
-function Profile (props) {
-  var info = props.info;
 
-  return (
-    <PlayerPreview username={info.login} avatar={info.avatar_url}>
-      <ul className='space-list-items'>
-        {info.name && <li>{info.name}</li>}
-        {info.location && <li>{info.location}</li>}
-        {info.company && <li>{info.company}</li>}
-        <li>Followers: {info.followers}</li>
-        <li>Following: {info.following}</li>
-        <li>Public Repos: {info.public_repos}</li>
-        {info.blog && <li><a href={info.blog}>{info.blog}</a></li>}
-      </ul>
-    </PlayerPreview>
-  )
-}
-
-Profile.propTypes = {
-  info: PropTypes.object.isRequired,
-}
-
-function Player (props) {
-  return (
-    <div>
-      <h1 className='header'>{props.label}</h1>
-      <h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
-      <Profile info={props.profile} />
-    </div>
-  )
-}
-
-Player.propTypes = {
-  label: PropTypes.string.isRequired,
-  score: PropTypes.number.isRequired,
-  profile: PropTypes.object.isRequired
-}
-
-class Results extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      winner: null,
-      loser: null,
-      error: null,
-      loading: true,
-    }
-    this.setState = this.setState.bind(this);
+function Results(props) {
+  const [error, setError] = useState(null)
+  const [winner, setWinner] = useState(null)
+  const [loser, setLoser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  
+  function updateState(error, loading, playerOne, playerTwo) {
+    setError(error)
+    setWinner(playerOne)
+    setLoser(playerTwo)
+    setLoading(loading)
   }
-  componentDidMount() {
-    var players = queryString.parse(this.props.location.search);
 
+  useEffect(() => {
+    console.log(props)
+    const players = queryString.parse(props.location.search)
     api.battle([
       players.playerOneName,
       players.playerTwoName
-    ]).then((players) => {
-      if (players === null) {
-        return this.setState(() => ({
-          error: 'Posible error',
-          loading: false
-        }));
+    ]).then((response) => {
+      if (response === null) {
+        setError('Error on data retrivial')
+        setLoading(false)
       }
+      
+      updateState(null, false, response[0], response[1] )
+    })
+    return () => null
+  }, [props])
 
-    this.setState(() => ({
-      error: null,
-      winner: players[0],
-      loser: players[1],
-      loading: false
-      }))
-    });
-  }
-  render() {
-    var error = this.state.error;
-    var winner = this.state.winner;
-    var loser = this.state.loser;
-    var loading = this.state.loading;
-
-    if (loading) {
-      return <Loading text='Please Wait' />
-    }
-
-    if (error) {
-      return (
-        <div>
-          <p>{error}</p>
-          <Link to='/battle'>Reset</Link>
-        </div>
-      )
-    }
-
-    return (
-      <div className='row'>
+  return loading ? 
+    <Loading text='Please Wait' refresh='300' />
+    : error ?
+      (<div>
+        <p>{error}</p>
+        <Link to='/battle'>Reset</Link>
+      </div>)
+      :
+      ( <div className='row'>
         <Player
           label='Winner'
           score={winner.score}
@@ -109,8 +56,7 @@ class Results extends Component {
           profile={loser.profile}
         />
       </div>
-    )
-  }
+      )
 }
 
 export default Results;

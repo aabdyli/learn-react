@@ -1,51 +1,33 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useLayoutEffect } from 'react';
 
-var styles = {
+let styles = {
   content: {
     textAlign: 'center',
     fontSize: '35px'
   }
 }
 
-class Loading extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      text: props.text
-    }
-  }
-  componentDidMount() {
-    var stopper = this.props.text + '...';
-
-    this.interval = window.setInterval(() => {
-      if (this.state.text === stopper)
-        this.setState(() => ({text: this.props.text}))
+function Loading(props) {
+  const [text, setText] = useState(props.text)
+  
+  useLayoutEffect(() => {
+    let stopper = `${props.text}...`
+    let interval = window.setInterval(() => {
+      if (text === stopper)
+        setText(props.text)
       else
-        this.setState((prevState) => ({text: prevState.text + '.'}))
-    }, this.props.speed)
-  }
-  componentWillUnmount() {
-    return window.clearInterval(this.interval);
-  }
-  render() {
-    return (
+        setText(text + '.')
+    }, props.refresh)
+    return () => window.clearInterval(interval)
+  }, [text, props])
+  
+  return (
+    (
       <p style={styles.content}>
-        {this.state.text}
+        {text}
       </p>
     )
-  }
+  )
 }
-
-Loading.propTypes = {
-  text: PropTypes.string.isRequired,
-  speed: PropTypes.number.isRequired
-}
-
-Loading.defaultProps = {
-  text: 'Loading',
-  speed: 300
-};
 
 export default Loading;
