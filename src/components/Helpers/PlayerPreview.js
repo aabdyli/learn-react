@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function PlayerPreview (props) {
+export default function PlayerPreview (props) {
   return (
     <div>
       <div className='column'>

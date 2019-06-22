@@ -1,9 +1,7 @@
 import React from 'react'
-import { PlayerPreview } from './PlayerPreview';
+import PlayerPreview from './PlayerPreview';
 
-function Profile (props) {
-  const info = props.info;
-
+function Profile ({info}) {
   return (
     <PlayerPreview username={info.login} avatar={info.avatar_url}>
       <ul className='space-list-items'>

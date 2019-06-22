@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import * as api from '../utils/api';
 import Loading from './Loading';
-import { Player } from './Player';
+import Player from './Helpers/Player';
 
 
 function Results(props) {

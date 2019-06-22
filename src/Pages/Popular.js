@@ -1,8 +1,8 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
-import * as api from '../utils/api';
-import Loading from './Loading';
-import SelectLanguage from './SelectLanguage';
-import RepoGrid from './RepoGrid'
+import React, { useState, useLayoutEffect, useRef } from 'react'
+import * as api from '../utils/api'
+import Loading from '../components/Loading'
+import SelectLanguage from '../components/Helpers/SelectLanguage'
+import RepoGrid from '../components/Helpers/RepoGrid'
 
 function Popular() {
   const [language, setLanguage] = useState('All')
@@ -19,6 +19,7 @@ function Popular() {
 
   const updateLanguage = (lang) =>{
     setLanguage(lang)
+    setRepos(null)
     api.fetchPopularRepos(lang)
       .then(repos => setRepos( repos ));
   }
