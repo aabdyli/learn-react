@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import PlayerPreview from '../components/Helpers/PlayerPreview';
 import PlayerInput from '../components/PlayerInput';
 
+// don't judge my hook
+// just trying to understand custom hooks
+const usePlayerInfo = (state) => {
+  const [player, setPlayer] = useState(state)
+  const playerImage = useMemo(() => `https://github.com/${player}.png?size=200`, [player])
+
+  return [player, playerImage, setPlayer]
+}
+
 function Battle({match}) {
-  const [playerOne, setPlayerOne] = useState('')
-  const playerOneImage = useMemo(() => `https://github.com/${playerOne}.png?size=200`, [playerOne] )
-  const [playerTwo, setPlayerTwo] = useState('')
-  const playerTwoImage = useMemo(() => `https://github.com/${playerTwo}.png?size=200`, [playerTwo] )
+  const [playerOne, playerOneImage, setPlayerOne] = usePlayerInfo('')
+  const [playerTwo, playerTwoImage, setPlayerTwo] = usePlayerInfo('')
 
   return (
     <div>
